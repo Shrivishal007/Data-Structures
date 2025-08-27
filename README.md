@@ -9,10 +9,13 @@ I’ll keep updating as I learn new topics.
 ## 📚 Contents
 
 ### C (Data Structures)
-- Arrays
+- Array
 - Linked List
+- Doubly Linked List
 - Stack
-- Queue  
+- Queue
+- Circular Queue
+- Deque
 *(more coming soon)*
 
 ---
