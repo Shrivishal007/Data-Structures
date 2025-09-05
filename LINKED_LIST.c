@@ -39,11 +39,11 @@ void addTail(int value)
 
     node->data = value;
     node->next = NULL;
-    if (tail != NULL)
-        tail->next = node;
-    tail = node;
     if (head == NULL)
         head = node;
+    else
+        tail->next = node;
+    tail = node;
     count++;
     printf("%d is added to the linked list\n", value);
 }
