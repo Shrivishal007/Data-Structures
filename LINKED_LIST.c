@@ -39,7 +39,8 @@ void addTail(int value)
 
     node->data = value;
     node->next = NULL;
-    tail->next = node;
+    if (tail != NULL)
+        tail->next = node;
     tail = node;
     if (head == NULL)
         head = node;
