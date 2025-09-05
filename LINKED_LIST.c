@@ -10,7 +10,7 @@ typedef struct NODE
 NODE *head = NULL, *tail = NULL;
 int count = 0;
 
-void add(int value)
+void addHead(int value)
 {
     NODE *node = (NODE *)malloc(sizeof(NODE));
     if (node == NULL)
@@ -20,14 +20,29 @@ void add(int value)
     }
 
     node->data = value;
-    node->next = NULL;
-    if (head == NULL)
-        head = node;
-    else
-        tail->next = node;
-    tail = node;
+    node->next = head;
+    head = node;
+    if (tail == NULL)
+        tail = node;
     count++;
-    printf("%d is added in to the linked list\n", value);
+    printf("%d is added to the linked list\n", value);
+}
+
+void removeHead()
+{
+    if (head == NULL)
+    {
+        printf("Linked list is empty\n");
+        return;
+    }
+    NODE *node = head;
+    int value = node->data;
+    head = head->next;
+    if (head == NULL)
+        tail = NULL;
+    free(node);
+    count--;
+    printf("%d is deleted from the linked list\n", value);
 }
 
 void insert(int position, int value)
@@ -57,8 +72,8 @@ void insert(int position, int value)
 
     else if (position == count)
     {
-        tail->next = node;
         node->next = NULL;
+        tail->next = node;
         tail = node;
     }
 
@@ -70,10 +85,10 @@ void insert(int position, int value)
         ptr->next = node;
     }
     count++;
-    printf("%d is added in the index position %d of the linked list\n", value, position);
+    printf("%d is inserted in the index position %d of the linked list\n", value, position);
 }
 
-void delete(int index)
+void delete_at(int index)
 {
     int value;
     NODE *node, *ptr = head;
@@ -114,31 +129,6 @@ void delete(int index)
     printf("%d is deleted in the linked list at index position %d\n", value, index);
 }
 
-void search(int target)
-{
-    if (head == NULL)
-    {
-        printf("Linked list is empty\n");
-        return;
-    }
-    NODE *node = head;
-    int i = 0, element_found = 0;
-    while (node != NULL)
-    {
-        if (node->data == target)
-        {
-            printf("Element found at position %d\n", i);
-            element_found = 1;
-        }
-
-        node = node->next;
-        i++;
-    }
-
-    if (!element_found)
-        printf("Element is not found in the linked list\n");
-}
-
 void display()
 {
     NODE *node = head;
@@ -147,7 +137,7 @@ void display()
         printf("Linked list is empty\n");
         return;
     }
-    while (node != NULL)
+    while (node)
     {
         printf("%d ", node->data);
         node = node->next;
@@ -160,7 +150,7 @@ int main()
     int choice, pos, value;
     while (1)
     {
-        printf("\n1. Add\n 2.Insert\n3. Delete\n4. Search\n5. Display\n6. Exit\n");
+        printf("\n1. Add at Head\n2. Delete at Head\n3.Insert\n4. Delete\n5. Display\n6. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         if (choice == 6)
@@ -171,24 +161,22 @@ int main()
         case 1:
             printf("Enter the element to be added: ");
             scanf("%d", &value);
-            add(value);
+            addHead(value);
             break;
         case 2:
+            removeHead();
+            break;
+        case 3:
             printf("Enter the index position of the element to be inserted: ");
             scanf("%d", &pos);
             printf("Enter the element to be inserted: ");
             scanf("%d", &value);
             insert(pos, value);
             break;
-        case 3:
+        case 4:
             printf("Enter the index position of the element to be deleted: ");
             scanf("%d", &pos);
-            delete(pos);
-            break;
-        case 4:
-            printf("Enter the value to be searched: ");
-            scanf("%d", &value);
-            search(value);
+            delete_at(pos);
             break;
         case 5:
             display();
@@ -199,7 +187,7 @@ int main()
         }
     }
 
-    while (head != NULL)
+    while (head)
     {
         NODE *node = head;
         head = head->next;
