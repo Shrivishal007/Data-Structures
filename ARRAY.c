@@ -12,7 +12,7 @@ void add_element(int value)
         return;
     }
     arr[n++] = value;
-    printf("%d is added to the array\n ", value);
+    printf("%d is added to the array\n", value);
 }
 
 void remove_element()
