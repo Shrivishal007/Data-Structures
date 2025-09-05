@@ -78,7 +78,7 @@ void display(Stack *stack)
         printf("Stack linked list is empty\n");
         return;
     }
-    while (node != NULL)
+    while (node)
     {
         printf("%d ", node->data);
         node = node->next;
@@ -143,7 +143,7 @@ int main()
         }
     }
 
-    while (stack->top != NULL)
+    while (stack->top)
     {
         NODE *node = stack->top;
         stack->top = stack->top->next;

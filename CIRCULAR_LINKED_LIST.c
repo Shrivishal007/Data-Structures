@@ -7,10 +7,10 @@ typedef struct NODE
     struct NODE *next;
 } NODE;
 
-NODE *head = NULL, *tail = NULL;
+NODE *start = NULL, *end = NULL;
 int count = 0;
 
-void addHead(int value)
+void addStart(int value)
 {
     NODE *node = (NODE *)malloc(sizeof(NODE));
     if (node == NULL)
@@ -20,54 +20,73 @@ void addHead(int value)
     }
 
     node->data = value;
-    node->next = head;
-    head = node;
-    if (tail == NULL)
-        tail = node;
-    count++;
-    printf("%d is added to the linked list\n", value);
-}
-
-void addTail(int value)
-{
-    NODE *node = (NODE *)malloc(sizeof(NODE));
-    if (node == NULL)
+    if (start == NULL)
     {
-        printf("Node is not created\n");
-        exit(1);
-    }
-
-    node->data = value;
-    node->next = NULL;
-    if (head == NULL)
-        head = node;
+        node->next = node;
+        start = end = node;
+    } 
     else
-        tail->next = node;
-    tail = node;
+    {
+        node->next = start;
+        start = node;
+        end->next = start;
+    }
     count++;
-    printf("%d is added to the linked list\n", value);
+    printf("%d is added to the start of the circular linked list\n", value);
 }
 
-void removeHead()
+void addEnd(int value)
 {
-    if (head == NULL)
+    NODE *node = malloc(sizeof(NODE));
+    if (node == NULL)
+    {
+        printf("Node is not created\n");
+        exit(1);
+    }
+
+    node->data = value;
+
+    if (start == NULL)
+    {
+        node->next = node;
+        start = end = node;
+    }
+    else
+    {
+        node->next = start;
+        end->next = node;
+        end = node;
+    }
+    count++;
+    printf("%d is added to the end of the circular linked list\n", value);
+}
+
+
+void removeStart()
+{
+    if (start == NULL)
     {
         printf("Linked list is empty\n");
         return;
     }
-    NODE *node = head;
+    NODE *node = start;
     int value = node->data;
-    head = head->next;
-    if (head == NULL)
-        tail = NULL;
+
+    if (start != end)
+    {
+        start = start->next;
+        end->next = start;
+    }
+    else
+        start = end = NULL;
     free(node);
     count--;
-    printf("%d is deleted from the linked list\n", value);
+    printf("%d is deleted from the circular linked list\n", value);
 }
 
 void insert(int position, int value)
 {
-    NODE *node, *ptr = head;
+    NODE *node, *ptr = start;
     if (position < 0 || position > count)
     {
         printf("Out of Range\n");
@@ -84,17 +103,24 @@ void insert(int position, int value)
     node->data = value;
     if (position == 0)
     {
-        node->next = head;
-        head = node;
-        if (tail == NULL)
-            tail = node;
+        if (start == NULL)
+        {
+            node->next = node;
+            start = end = node;
+        } 
+        else
+        {
+            node->next = start;
+            start = node;
+            end->next = start;
+        }
     }
 
     else if (position == count)
     {
-        node->next = NULL;
-        tail->next = node;
-        tail = node;
+        node->next = start;
+        end->next = node;
+        end = node;
     }
 
     else
@@ -105,14 +131,14 @@ void insert(int position, int value)
         ptr->next = node;
     }
     count++;
-    printf("%d is inserted in the index position %d of the linked list\n", value, position);
+    printf("%d is inserted in the index position %d of the circular linked list\n", value, position);
 }
 
 void delete_at(int index)
 {
     int value;
-    NODE *node, *ptr = head;
-    if (head == NULL)
+    NODE *node, *ptr = start;
+    if (start == NULL)
     {
         printf("Linked list is empty\n");
         return;
@@ -126,11 +152,15 @@ void delete_at(int index)
 
     if (index == 0)
     {
-        node = head;
+        node = start;
         value = node->data;
-        head = head->next;
-        if (head == NULL)
-            tail = NULL;
+        if (start != end)
+        {
+            start = start->next;
+            end->next = start;
+        }
+        else
+            start = end = NULL;
         free(node);
     }
 
@@ -141,8 +171,8 @@ void delete_at(int index)
         node = ptr->next;
         value = node->data;
         ptr->next = node->next;
-        if (node == tail)
-            tail = ptr;
+        if (node == end)
+            end = ptr;
         free(node);
     }
     count--;
@@ -151,16 +181,18 @@ void delete_at(int index)
 
 void display()
 {
-    NODE *node = head;
-    if (head == NULL)
+    NODE *node = start;
+    if (start == NULL)
     {
         printf("Linked list is empty\n");
         return;
     }
-    while (node)
+    while (1)
     {
         printf("%d ", node->data);
         node = node->next;
+        if(node == start)
+            break;
     }
     printf("\n");
 }
@@ -175,7 +207,7 @@ int main()
     int choice, pos, value;
     while (1)
     {
-        printf("\n1. Add at Head\n2. Add at Tail\n3. Delete at Head\n4. Insert\n5. Delete\n6. Display\n7. Size of\n8. Exit\n");
+        printf("\n1. Add at Start\n2. Add at End\n3. Delete at Start\n4. Insert\n5. Delete\n6. Display\n7. Size of\n8. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
         if (choice == 8)
@@ -186,15 +218,15 @@ int main()
         case 1:
             printf("Enter the element to be added: ");
             scanf("%d", &value);
-            addHead(value);
+            addStart(value);
             break;
         case 2:
             printf("Enter the element to be added: ");
             scanf("%d", &value);
-            addTail(value);
+            addEnd(value);
             break;
         case 3:
-            removeHead();
+            removeStart();
             break;
         case 4:
             printf("Enter the index position of the element to be inserted: ");
@@ -212,7 +244,7 @@ int main()
             display();
             break;
         case 7:
-            printf("The size of the linked list is %d\n", size_of());
+            printf("The size of the circular linked list is %d\n", size_of());
             break;
         default:
             printf("Invalid choice!\n");
@@ -220,10 +252,12 @@ int main()
         }
     }
 
-    while (head)
+    if (start != NULL)
+        end->next = NULL;
+    while (start)
     {
-        NODE *node = head;
-        head = head->next;
+        NODE *node = start;
+        start = start->next;
         free(node);
     }
     printf("Program exited!\n");

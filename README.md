@@ -11,7 +11,9 @@ I’ll keep updating as I learn new topics.
 ### C (Data Structures)
 - Array
 - Linked List
+- Circular Linked List
 - Doubly Linked List
+- Circular Doubly Linked List
 - Stack
 - Queue
 - Circular Queue

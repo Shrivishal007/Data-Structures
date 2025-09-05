@@ -12,7 +12,20 @@ void add_element(int value)
         return;
     }
     arr[n++] = value;
-    printf("%d is added in the array\n", value);
+    printf("%d is added to the array\n", value);
+}
+
+void remove_element()
+{
+    int value;
+    if (n == 0)
+    {
+        printf("Array is empty\n");
+        return;
+    }
+    value = arr[n-1];
+    n--;
+    printf("%d is deleted from the array\n", value);
 }
 
 void insert(int position, int value)
@@ -33,11 +46,11 @@ void insert(int position, int value)
         arr[i] = arr[i-1];
     arr[position] = value;
     n++;
-    printf("%d is inserted in the array at index position %d\n", value, position);
+    printf("%d is inserted to the array at index position %d\n", value, position);
 
 }
 
-void delete_element(int index)
+void delete_at(int index)
 {
     int value;
     if (n == 0)
@@ -55,25 +68,7 @@ void delete_element(int index)
     for (int i = index; i < n - 1; i++)
         arr[i] = arr[i+1];
     n--;
-    printf("%d is deleted in the array at index position %d\n", value, index);
-}
-
-void search(int target)
-{
-    if (n == 0)
-    {
-        printf("Array is empty\n");
-        return;
-    }
-    int element_found = 0;
-    for (int i = 0; i < n; i++)
-        if (arr[i] == target)
-        {
-            printf("Element found at index position %d\n", i);
-            element_found = 1;
-        }
-    if (!element_found)
-        printf("Element is not found in the array\n");  
+    printf("%d is deleted from the array at index position %d\n", value, index);
 }
 
 void display()
@@ -86,6 +81,11 @@ void display()
     for (int i = 0; i < n; i++)
         printf("%d ", arr[i]);
     printf("\n");
+}
+
+int size_of()
+{
+    return n;
 }
 
 int main ()
@@ -108,10 +108,10 @@ int main ()
 
     while (1)
     {
-        printf("\n1. Add\n2. Insert\n3. Delete\n4. Search\n5. Display\n6. Exit\n");
+        printf("\n1. Add\n2. Remove\n3. Insert\n4. Delete\n5. Display\n6. Size of\n7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        if (choice == 6)
+        if (choice == 7)
             break;
         
         switch (choice)
@@ -122,24 +122,25 @@ int main ()
                 add_element(value);
                 break;
             case 2:
+                remove_element();
+                break;
+            case 3:
                 printf("Enter the index position of the element to be inserted: ");
                 scanf("%d", &pos);
                 printf("Enter the element to be inserted: ");
                 scanf("%d", &value);
                 insert(pos, value);
                 break;
-            case 3:
+            case 4:
                 printf("Enter the index position of the element to be deleted: ");
                 scanf("%d", &pos);
-                delete_element(pos);
-                break;
-            case 4:
-                printf("Enter the value to be searched: ");
-                scanf("%d", &value);
-                search(value);
+                delete_at(pos);
                 break;
             case 5:
                 display();
+                break;
+            case 6:
+                printf("The size of the array is %d\n", size_of());
                 break;
             default:
                 printf("Invalid choice!\n");
