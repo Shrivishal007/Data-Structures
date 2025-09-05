@@ -28,6 +28,25 @@ void addHead(int value)
     printf("%d is added to the linked list\n", value);
 }
 
+void addTail(int value)
+{
+    NODE *node = (NODE *)malloc(sizeof(NODE));
+    if (node == NULL)
+    {
+        printf("Node is not created\n");
+        exit(1);
+    }
+
+    node->data = value;
+    node->next = NULL;
+    tail->next = node;
+    tail = node;
+    if (head == NULL)
+        head = node;
+    count++;
+    printf("%d is added to the linked list\n", value);
+}
+
 void removeHead()
 {
     if (head == NULL)
@@ -150,10 +169,10 @@ int main()
     int choice, pos, value;
     while (1)
     {
-        printf("\n1. Add at Head\n2. Delete at Head\n3.Insert\n4. Delete\n5. Display\n6. Exit\n");
+        printf("\n1. Add at Head\n2. Add at Tail\n3. Delete at Head\n4. Insert\n5. Delete\n6. Display\n7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        if (choice == 6)
+        if (choice == 7)
             break;
 
         switch (choice)
@@ -164,21 +183,26 @@ int main()
             addHead(value);
             break;
         case 2:
-            removeHead();
+            printf("Enter the element to be added: ");
+            scanf("%d", &value);
+            addTail(value);
             break;
         case 3:
+            removeHead();
+            break;
+        case 4:
             printf("Enter the index position of the element to be inserted: ");
             scanf("%d", &pos);
             printf("Enter the element to be inserted: ");
             scanf("%d", &value);
             insert(pos, value);
             break;
-        case 4:
+        case 5:
             printf("Enter the index position of the element to be deleted: ");
             scanf("%d", &pos);
             delete_at(pos);
             break;
-        case 5:
+        case 6:
             display();
             break;
         default:
