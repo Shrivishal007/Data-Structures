@@ -83,6 +83,11 @@ void display()
     printf("\n");
 }
 
+int size_of()
+{
+    return n;
+}
+
 int main ()
 {
     int choice, pos, value;
@@ -103,10 +108,10 @@ int main ()
 
     while (1)
     {
-        printf("\n1. Add\n2. Remove\n3. Insert\n4. Delete\n5. Display\n6. Exit\n");
+        printf("\n1. Add\n2. Remove\n3. Insert\n4. Delete\n5. Display\n6. Size of\n7. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        if (choice == 6)
+        if (choice == 7)
             break;
         
         switch (choice)
@@ -133,6 +138,9 @@ int main ()
                 break;
             case 5:
                 display();
+                break;
+            case 6:
+                printf("The size of the array is %d\n", size_of());
                 break;
             default:
                 printf("Invalid choice!\n");
