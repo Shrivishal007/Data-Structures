@@ -3,8 +3,8 @@
 
 typedef struct NODE
 {
-    int data;
     struct NODE *previous;
+    int data;
     struct NODE *next;
 } NODE;
 
@@ -144,7 +144,7 @@ void display(Deque *deque)
     }
 
     NODE *node = deque->front;
-    while (node != NULL)
+    while (node)
     {
         printf("%d ", node->data);
         node = node->next;
@@ -222,7 +222,7 @@ int main()
         }
     }
 
-    while (deque->front != NULL)
+    while (deque->front)
     {
         NODE *node = deque->front;
         deque->front = deque->front->next;

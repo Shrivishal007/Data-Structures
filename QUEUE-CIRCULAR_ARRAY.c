@@ -53,6 +53,7 @@ int dequeue(Queue *queue)
         printf("Circular queue array is empty\n");
         exit(1);
     }
+    
     int value = queue->arr[queue->front];
     if (queue->front == queue->rear)
         queue->front = queue->rear = -1;

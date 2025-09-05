@@ -100,7 +100,7 @@ void display(Queue *queue)
     }
 
     node = queue->front;
-    while (node != NULL)
+    while (node)
     {
         printf("%d ", node->data);
         node = node->next;
@@ -169,7 +169,7 @@ int main()
         }
     }
 
-    while (queue->front != NULL)
+    while (queue->front)
     {
         NODE *node = queue->front;
         queue->front = queue->front->next;
