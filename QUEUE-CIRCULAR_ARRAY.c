@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -9,7 +10,7 @@ typedef struct
     int rear;
 } Queue;
 
-Queue *create_queue(int size)
+Queue *createQueue(int size)
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));
     if (queue == NULL)
@@ -49,10 +50,7 @@ void enqueue(Queue *queue, int value)
 int dequeue(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Circular queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     
     int value = queue->arr[queue->front];
     if (queue->front == queue->rear)
@@ -62,23 +60,17 @@ int dequeue(Queue *queue)
     return value;
 }
 
-int get_front(Queue *queue)
+int getFront(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Circular queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->arr[queue->front];
 }
 
-int get_rear(Queue *queue)
+int getRear(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Circular queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->arr[queue->rear];
 }
 
@@ -101,12 +93,12 @@ void display(Queue *queue)
     printf("\n");
 }
 
-int is_empty(Queue *queue)
+int isEmpty(Queue *queue)
 {
     return queue->front == -1;
 }
 
-int size_of(Queue *queue)
+int getSize(Queue *queue)
 {
     if (queue->front == -1)
         return 0;
@@ -121,7 +113,7 @@ int main()
 
     printf("Enter the size of the queue array to be created: ");
     scanf("%d", &size);
-    queue = create_queue(size);
+    queue = createQueue(size);
 
     while (1)
     {
@@ -140,28 +132,36 @@ int main()
             break;
         case 2:
             res = dequeue(queue);
-            printf("%d is deleted in the queue array\n", res);
+            if (res == INT_MIN)
+                printf("Circular queue array is empty\n");
+            else
+                printf("%d is deleted in the queue array\n", res);
             break;
         case 3:
-            res = get_front(queue);
-            printf("%d is at the front of the queue array\n", res);
+            res = getFront(queue);
+            if (res == INT_MIN)
+                printf("Circular queue array is empty\n");
+            else
+                printf("%d is at the front of the queue array\n", res);
             break;
         case 4:
-            res = get_rear(queue);
-            printf("%d is at the back of the queue array\n", res);
+            res = getRear(queue);
+            if (res == INT_MIN)
+                printf("Circular queue array is empty\n");
+            else
+                printf("%d is at the back of the queue array\n", res);
             break;
         case 5:
             display(queue);
             break;
         case 6:
-            if (is_empty(queue))
+            if (isEmpty(queue))
                 printf("Queue array is empty\n");
             else
                 printf("Queue array is not empty\n");
             break;
         case 7:
-            res = size_of(queue);
-            printf("The size of the queue array is %d\n", res);
+            printf("The size of the queue array is %d\n", getSize(queue));
             break;
         default:
             printf("Invalid choice!\n");

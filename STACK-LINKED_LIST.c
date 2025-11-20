@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct NODE
 {
@@ -13,7 +14,7 @@ typedef struct
     int size;
 } Stack;
 
-Stack *create_stack()
+Stack *createStack()
 {
     Stack *stack = (Stack *)malloc(sizeof(Stack));
     if (stack == NULL)
@@ -46,10 +47,7 @@ void push(Stack *stack, int value)
 int pop(Stack *stack)
 {
     if (stack->top == NULL)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     NODE *node = stack->top;
     int value = node->data;
@@ -62,11 +60,7 @@ int pop(Stack *stack)
 int peek(Stack *stack)
 {
     if (stack->top == NULL)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
-
+        return INT_MIN;
     return stack->top->data;
 }
 
@@ -86,19 +80,19 @@ void display(Stack *stack)
     printf("\n");
 }
 
-int is_empty(Stack *stack)
+int isEmpty(Stack *stack)
 {
     return (stack->top == NULL);
 }
 
-int size_of(Stack *stack)
+int getSize(Stack *stack)
 {
     return stack->size;
 }
 
 int main()
 {
-    Stack *stack = create_stack();
+    Stack *stack = createStack();
     int choice, value, res;
 
     while (1)
@@ -118,24 +112,29 @@ int main()
             break;
         case 2:
             res = pop(stack);
-            printf("%d is deleted in the stack linked list\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is deleted in the stack linked list\n", res);
             break;
         case 3:
             res = peek(stack);
-            printf("%d is on top of the stack linked list\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is on top of the stack linked list\n", res);
             break;
         case 4:
             display(stack);
             break;
         case 5:
-            if (is_empty(stack))
+            if (isEmpty(stack))
                 printf("Stack is empty\n");
             else
                 printf("Stack is not empty\n");
             break;
         case 6:
-            res = size_of(stack);
-            printf("The size of the stack linked list is %d\n", res);
+            printf("The size of the stack linked list is %d\n", getSize(stack));
             break;
         default:
             printf("Invalid choice!\n");

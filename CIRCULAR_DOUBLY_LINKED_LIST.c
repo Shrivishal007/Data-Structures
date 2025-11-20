@@ -3,7 +3,7 @@
 
 typedef struct NODE
 {
-    struct NODE *previous;
+    struct NODE *prev;
     int data;
     struct NODE *next;
 } NODE;
@@ -23,18 +23,18 @@ void addEnd(int value)
     node->data = value;
     if(start != NULL)
     {
-        end = start->previous;
+        end = start->prev;
 
-        node->previous = end;
+        node->prev = end;
         node->next = start;
 
         end->next = node;
-        start->previous = node;
+        start->prev = node;
     }
     else
     {
         start = node;
-        node->previous = node;
+        node->prev = node;
         node->next = node;
     }
 
@@ -54,19 +54,19 @@ void addStart(int value)
     node->data = value;
     if(start != NULL)
     {
-        end = start->previous;
+        end = start->prev;
 
-        node->previous = end;
+        node->prev = end;
         node->next = start;
 
-        start->previous = node;
+        start->prev = node;
         start = node;
         end->next = start;
     }
     else
     {
         start = node;
-        node->previous = node;
+        node->prev = node;
         node->next = node;
     }
 
@@ -85,13 +85,13 @@ void removeStart()
     }
 
     value = node->data;
-    end = start->previous;
+    end = start->prev;
 
     if (start != start->next)
     {   
         start = start->next;
         end->next = start;
-        start->previous = end;
+        start->prev = end;
     }
     else
         start = NULL;
@@ -102,19 +102,18 @@ void removeStart()
 
 void removeEnd()
 {
-    NODE *node = start->previous;
-    int value;
     if (start == NULL)
     {
         printf("Circular doubly Linked list is empty\n");
         return;
     }
 
-    value = node->data;
+    NODE *node = start->prev;
+    int value = node->data;
     if (start != start->next)
     {
-        start->previous = node->previous;
-        node->previous->next = start;
+        start->prev = node->prev;
+        node->prev->next = start;
     }
     else
         start = NULL;
@@ -123,72 +122,52 @@ void removeEnd()
     printf("%d is deleted at the end of the circular doubly linked list\n", value);
 }
 
-void insert(int position, int value)
+void insertAt(int position, int value)
 {
-    NODE *node, *ptr = start, *end;
+    NODE *node, *ptr = start;
     if (position < 0 || position > count)
     {
         printf("Out of Range\n");
         return;
     }
-
-    node = (NODE *)malloc(sizeof(NODE));
-    if (node == NULL)
-    {
-        printf("Node is not created\n");
-        exit(1);
-    }
-
-    node->data = value;
     if (position == 0)
     {
-        if (start != NULL)
-        {
-            end = start->previous;
-
-            node->previous = end;
-            node->next = start;
-
-            start->previous = node;
-            start = node;
-            end->next = start;
-        }
-        else
-        {
-            start = node;
-            node->previous = node;
-            node->next = node;
-        }
+        addStart(value);
+        return;
     }
 
     else if (position == count)
     {
-        end = start->previous;
-
-        node->previous = end;
-        node->next = start;
-
-        end->next = node;
-        start->previous = node;
+        addEnd(value);
+        return;
     }
 
     else
     {
+        node = (NODE *)malloc(sizeof(NODE));
+        if (node == NULL)
+        {
+            printf("Node is not created\n");
+            exit(1);
+        }
+
+        node->data = value;
         for (int i = 0; i < position - 1; i++)
             ptr = ptr->next;
         node->next = ptr->next;
-        node->previous = ptr;
-        ptr->next->previous = node;
+        node->prev = ptr;
+        ptr->next->prev = node;
         ptr->next = node;
+        count++;
     }
-    count++;
+    
     printf("%d is inserted in the index position %d of the circular doubly linked list\n", value, position);
 }
 
-void delete_at(int index)
+void deleteAt(int index)
 {
     int value;
-    NODE *node, *ptr = start, *end;
+    NODE *node, *ptr = start;
     if (start == NULL)
     {
         printf("Circular doubly linked list is empty\n");
@@ -203,34 +182,14 @@ void delete_at(int index)
 
     if (index == 0)
     {
-        node = start;
-        value = node->data;
-        end = start->previous;
-
-        if (start != start->next)
-        {   
-            start = start->next;
-            end->next = start;
-            start->previous = end;
-        }
-        else
-            start = NULL;
-        
-        free(node);
+        removeStart();
+        return;
     }
 
     else if (index == count - 1)
     {
-        node = start->previous;
-        value = node->data;
-        if (start != start->next)
-        {
-            start->previous = node->previous;
-            node->previous->next = start;
-        }
-        else
-            start = NULL;
-        free(node);
+        removeEnd();
+        return;
     }
 
     else
@@ -240,68 +199,67 @@ void delete_at(int index)
                 ptr = ptr->next;
         else
         {
-            ptr = start->previous;
+            ptr = start->prev;
             for (int i = count - 1; i > index; i--)
-                ptr = ptr->previous;
+                ptr = ptr->prev;
         }
 
         node = ptr;
         value = node->data;
 
-        node->previous->next = node->next;
-        node->next->previous = node->previous;
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
         
         free(node);
+        count--;
     }
-    count--;
+    
     printf("%d is deleted in the circular doubly linked list at index position %d\n", value, index);
 }
 
 void display()
 {
-    NODE *node = start;
     if (start == NULL)
     {
-        printf("Circular linked list is empty\n");
+        printf("Circular doubly linked list is empty\n");
         return;
     }
-    while (1)
+
+    NODE *node = start;
+    do
     {
         printf("%d ", node->data);
         node = node->next;
-        if(node == start)
-            break;
-    }
+    } while (node != start);
     printf("\n");
 }
 
-void reverse_display()
+void reverseDisplay()
 {
-    NODE *node = start->previous;
     if (start == NULL)
     {
-        printf("Circular linked list is empty\n");
+        printf("Circular doubly linked list is empty\n");
         return;
     }
-    while (1)
+
+    NODE *node = start->prev;
+    do
     {
         printf("%d ", node->data);
-        node = node->previous;
-        if(node == start->previous)
-            break;
-    }
+        node = node->prev;
+    } while (node != start->prev);
     printf("\n");
 }
 
 int main()
 {
-    int choice, pos, value;
+    int choice, position, value;
     while (1)
     {
-        printf("\n1. Add at Start\n2. Add at End\n3. Delete at Start\n4. Delete at End\n5. Insert\n6. Delete\n7. Display\n8. Reverse Display\n9. Exit\n");
+        printf("\n1. Add at Start\n2. Add at End\n3. Delete at Start\n4. Delete at End\n5. Insert\n6. Delete\n7. Display\n8. Reverse Display\n9. Size of\n10. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
-        if (choice == 9)
+        if (choice == 10)
             break;
 
         switch (choice)
@@ -324,21 +282,24 @@ int main()
             break;
         case 5:
             printf("Enter the index position of the element to be inserted: ");
-            scanf("%d", &pos);
+            scanf("%d", &position);
             printf("Enter the element to be inserted: ");
             scanf("%d", &value);
-            insert(pos, value);
+            insertAt(position, value);
             break;
         case 6:
             printf("Enter the index position of the element to be deleted: ");
-            scanf("%d", &pos);
-            delete_at(pos);
+            scanf("%d", &position);
+            deleteAt(position);
             break;
         case 7:
             display();
             break;
         case 8:
-            reverse_display();
+            reverseDisplay();
+            break;
+        case 9:
+            printf("The size of the circular doubly linked list is %d\n", count);
             break;
         default:
             printf("Invalid choice!\n");
@@ -347,13 +308,17 @@ int main()
     }
 
     if (start != NULL)
-        start->previous->next = NULL;
-    while (start)
     {
-        NODE *node = start;
-        start = start->next;
-        free(node);
-    }
+        NODE *current = start;
+        current->prev->next = NULL;
+
+        while (current)
+        {
+            NODE *temp = current;
+            current = current->next;
+            free(temp);
+        }
+    }    
     printf("Program exited!\n");
     return 0;
 }

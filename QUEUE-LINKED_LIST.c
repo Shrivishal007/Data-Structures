@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct NODE
 {
@@ -14,7 +15,7 @@ typedef struct
     int size;
 } Queue;
 
-Queue *create_queue()
+Queue *createQueue()
 {
     Queue *queue = (Queue *)malloc(sizeof(Queue));
     if (queue == NULL)
@@ -30,21 +31,21 @@ Queue *create_queue()
 
 void enqueue(Queue *queue, int value)
 {
-    NODE *newNode = (NODE *)malloc(sizeof(NODE));
-    if (newNode == NULL)
+    NODE *node = (NODE *)malloc(sizeof(NODE));
+    if (node == NULL)
     {
         printf("Node is not created\n");
         exit(1);
     }
 
-    newNode->data = value;
-    newNode->next = NULL;
+    node->data = value;
+    node->next = NULL;
 
     if (queue->front == NULL)
-        queue->front = newNode;
+        queue->front = node;
     else
-        queue->rear->next = newNode;
-    queue->rear = newNode;
+        queue->rear->next = node;
+    queue->rear = node;
     (queue->size)++;
     printf("%d is added in the queue linked list\n", queue->rear->data);
 }
@@ -54,10 +55,7 @@ int dequeue(Queue *queue)
     NODE *node;
     int value;
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     node = queue->front;
     value = node->data;
@@ -70,23 +68,17 @@ int dequeue(Queue *queue)
     return value;
 }
 
-int get_front(Queue *queue)
+int getFront(Queue *queue)
 {
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->front->data;
 }
 
-int get_rear(Queue *queue)
+int getRear(Queue *queue)
 {
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->rear->data;
 }
 
@@ -108,19 +100,19 @@ void display(Queue *queue)
     printf("\n");
 }
 
-int is_empty(Queue *queue)
+int isEmpty(Queue *queue)
 {
     return queue->front == NULL;
 }
 
-int size_of(Queue *queue)
+int getSize(Queue *queue)
 {
     return queue->size;
 }
 
 int main()
 {
-    Queue *queue = create_queue();
+    Queue *queue = createQueue();
     int choice, value, res;
 
     while (1)
@@ -140,28 +132,36 @@ int main()
             break;
         case 2:
             res = dequeue(queue);
-            printf("%d is deleted in the queue linked list\n", res);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is deleted in the queue linked list\n", res);
             break;
         case 3:
-            res = get_front(queue);
-            printf("%d is at the front of the queue linked list\n", res);
+            res = getFront(queue);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is at the front of the queue linked list\n", res);
             break;
         case 4:
-            res = get_rear(queue);
-            printf("%d is at the back of the queue linked list\n", res);
+            res = getRear(queue);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is at the back of the queue linked list\n", res);
             break;
         case 5:
             display(queue);
             break;
         case 6:
-            if (is_empty(queue))
+            if (isEmpty(queue))
                 printf("Queue linked list is empty\n");
             else
                 printf("Queue linked list is not empty\n");
             break;
         case 7:
-            res = size_of(queue);
-            printf("The size of the queue linked list is %d\n", res);
+            printf("The size of the queue linked list is %d\n", getSize(queue));
             break;
         default:
             printf("Invalid choice!\n");

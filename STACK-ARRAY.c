@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -8,7 +9,7 @@ typedef struct
     int top;
 } Stack;
 
-Stack *create_stack(int size)
+Stack *createStack(int size)
 {
     Stack *stack = (Stack *)malloc(sizeof(Stack));
     if (stack == NULL)
@@ -45,10 +46,7 @@ void push(Stack *stack, int value)
 int pop(Stack *stack)
 {
     if (stack->top == -1)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     return stack->arr[stack->top--];
 }
@@ -56,10 +54,7 @@ int pop(Stack *stack)
 int peek(Stack *stack)
 {
     if (stack->top == -1)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     return stack->arr[stack->top];
 }
@@ -76,12 +71,12 @@ void display(Stack *stack)
     printf("\n");
 }
 
-int is_empty(Stack *stack)
+int isEmpty(Stack *stack)
 {
     return (stack->top == -1);
 }
 
-int size_of(Stack *stack)
+int getSize(Stack *stack)
 {
     return stack->top + 1;
 }
@@ -93,7 +88,7 @@ int main()
 
     printf("Enter the size of the stack array to be created: ");
     scanf("%d", &size);
-    stack = create_stack(size);
+    stack = createStack(size);
 
     while (1)
     {
@@ -112,24 +107,29 @@ int main()
             break;
         case 2:
             res = pop(stack);
-            printf("%d is deleted in the stack array\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is deleted in the stack array\n", res);
             break;
         case 3:
             res = peek(stack);
-            printf("%d is on top of the stack array\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is on top of the stack array\n", res);
             break;
         case 4:
             display(stack);
             break;
         case 5:
-            if (is_empty(stack))
+            if (isEmpty(stack))
                 printf("Stack array is empty\n");
             else
                 printf("Stack array is not empty\n");
             break;
         case 6:
-            res = size_of(stack);
-            printf("The size of the stack array is %d\n", res);
+            printf("The size of the stack array is %d\n", getSize(stack));
             break;
         default:
             printf("Invalid choice!\n");
