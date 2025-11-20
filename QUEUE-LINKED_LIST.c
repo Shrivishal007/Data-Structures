@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct NODE
 {
@@ -54,10 +55,7 @@ int dequeue(Queue *queue)
     NODE *node;
     int value;
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     node = queue->front;
     value = node->data;
@@ -73,20 +71,14 @@ int dequeue(Queue *queue)
 int get_front(Queue *queue)
 {
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->front->data;
 }
 
 int get_rear(Queue *queue)
 {
     if (queue->front == NULL)
-    {
-        printf("Queue linked list is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->rear->data;
 }
 
@@ -140,15 +132,24 @@ int main()
             break;
         case 2:
             res = dequeue(queue);
-            printf("%d is deleted in the queue linked list\n", res);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is deleted in the queue linked list\n", res);
             break;
         case 3:
             res = get_front(queue);
-            printf("%d is at the front of the queue linked list\n", res);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is at the front of the queue linked list\n", res);
             break;
         case 4:
             res = get_rear(queue);
-            printf("%d is at the back of the queue linked list\n", res);
+            if (res == INT_MIN)
+                printf("Queue linked list is empty\n");
+            else
+                printf("%d is at the back of the queue linked list\n", res);
             break;
         case 5:
             display(queue);

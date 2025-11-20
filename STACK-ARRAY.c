@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -45,10 +46,7 @@ void push(Stack *stack, int value)
 int pop(Stack *stack)
 {
     if (stack->top == -1)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     return stack->arr[stack->top--];
 }
@@ -56,10 +54,7 @@ int pop(Stack *stack)
 int peek(Stack *stack)
 {
     if (stack->top == -1)
-    {
-        printf("Error: Stack is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     return stack->arr[stack->top];
 }
@@ -112,11 +107,17 @@ int main()
             break;
         case 2:
             res = pop(stack);
-            printf("%d is deleted in the stack array\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is deleted in the stack array\n", res);
             break;
         case 3:
             res = peek(stack);
-            printf("%d is on top of the stack array\n", res);
+            if (res == INT_MIN)
+                printf("Error: Stack is empty\n");
+            else
+                printf("%d is on top of the stack array\n", res);
             break;
         case 4:
             display(stack);

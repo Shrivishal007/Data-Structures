@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -48,10 +49,8 @@ void enqueue(Queue *queue, int value)
 int dequeue(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
+
     int value = queue->arr[queue->front];
     if (queue->front == queue->rear)
         queue->front = queue->rear = -1;
@@ -63,20 +62,14 @@ int dequeue(Queue *queue)
 int get_front(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->arr[queue->front];
 }
 
 int get_rear(Queue *queue)
 {
     if (queue->front == -1)
-    {
-        printf("Queue array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return queue->arr[queue->rear];
 }
 
@@ -131,15 +124,24 @@ int main()
             break;
         case 2:
             res = dequeue(queue);
-            printf("%d is deleted in the queue array\n", res);
+            if (res == INT_MIN)
+                printf("Queue array is empty\n");
+            else
+                printf("%d is deleted in the queue array\n", res);
             break;
         case 3:
             res = get_front(queue);
-            printf("%d is at the front of the queue array\n", res);
+            if (res == INT_MIN)
+                printf("Queue array is empty\n");
+            else
+                printf("%d is at the front of the queue array\n", res);
             break;
         case 4:
             res = get_rear(queue);
-            printf("%d is at the back of the queue array\n", res);
+            if (res == INT_MIN)
+                printf("Queue array is empty\n");
+            else
+                printf("%d is at the back of the queue array\n", res);
             break;
         case 5:
             display(queue);

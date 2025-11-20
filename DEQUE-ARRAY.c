@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 typedef struct
 {
@@ -69,10 +70,7 @@ void insert_front(Deque *deque, int value)
 int delete_front(Deque *deque)
 {
     if (deque->front == -1)
-    {
-        printf("Deque array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     int value = deque->arr[deque->front];
     if (deque->front == deque->rear)
@@ -87,10 +85,7 @@ int delete_front(Deque *deque)
 int delete_rear(Deque *deque)
 {
     if (deque->front == -1)
-    {
-        printf("Deque array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
 
     int value = deque->arr[deque->rear];
     if (deque->front == deque->rear)
@@ -105,20 +100,14 @@ int delete_rear(Deque *deque)
 int get_front(Deque *deque)
 {
     if (deque->front == -1)
-    {
-        printf("Deque array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return deque->arr[deque->front];
 }
 
 int get_rear(Deque *deque)
 {
     if (deque->front == -1)
-    {
-        printf("Deque array is empty\n");
-        exit(1);
-    }
+        return INT_MIN;
     return deque->arr[deque->rear];
 }
 
@@ -187,19 +176,31 @@ int main()
             break;
         case 3:
             res = delete_front(deque);
-            printf("%d is deleted in the deque array at the front\n", res);
+            if (res == INT_MIN)
+                printf("Deque array is empty\n");
+            else
+                printf("%d is deleted in the deque array at the front\n", res);
             break;
         case 4:
             res = delete_rear(deque);
-            printf("%d is deleted in the deque array at the rear\n", res);
+            if (res == INT_MIN)
+                printf("Deque array is empty\n");
+            else
+                printf("%d is deleted in the deque array at the rear\n", res);
             break;
         case 5:
             res = get_front(deque);
-            printf("%d is at the front of the deque array\n", res);
+            if (res == INT_MIN)
+                printf("Deque array is empty\n");
+            else
+                printf("%d is at the front of the deque array\n", res);
             break;
         case 6:
             res = get_rear(deque);
-            printf("%d is at the back of the deque array\n", res);
+            if (res == INT_MIN)
+                printf("Deque array is empty\n");
+            else
+                printf("%d is at the back of the deque array\n", res);
             break;
         case 7:
             display(deque);
