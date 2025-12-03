@@ -18,6 +18,9 @@ I’ll keep updating as I learn new topics.
 - Queue
 - Circular Queue
 - Deque
+- Binary Search Tree
+- Binary Heaps
+- Graphs
 *(more coming soon)*
 
 ---
